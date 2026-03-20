@@ -11,7 +11,7 @@
   "plugins": [
     {
       "name": "commit-compliance",
-      "source": ".",
+      "source": "./",
       "description": "PII detection, tier switching (EU/Global), compliance review, and audit logging for Norwegian and EU enterprises.",
       "version": "0.1.0",
       "author": {
