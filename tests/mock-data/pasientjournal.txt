@@ -1,0 +1,16 @@
+Pasientjournal — Intern bruk
+
+Pasient: Kari Nordmann (fnr: 01019000083)
+Dato: 2025-11-15
+Behandlende lege: Dr. Eriksen
+
+Diagnose: Type 2 diabetes mellitus (E11)
+Henvisning sendt til: Endokrinologisk avdeling, OUS
+Resept: Metformin 500mg x 2 daglig
+
+Epikrise:
+Pasienten ble henvist fra fastlege med mistanke om diabetes type 2. 
+HbA1c målt til 58 mmol/mol. Pasienten startes på Metformin.
+Kontroll om 3 måneder med ny HbA1c.
+
+Sykmelding: 50% i 2 uker fra 2025-11-15

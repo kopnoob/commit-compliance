@@ -1,0 +1,6 @@
+kundenr,fornavn,etternavn,fodselsnummer,epost,telefon,adresse,postnr,poststed
+1001,Kari,Nordmann,01019000083,kari.nordmann@gmail.com,+47 912 34 567,Storgata 1,0182,Oslo
+1002,Ola,Hansen,15037800071,ola.hansen@outlook.com,+47 481 23 456,Kirkegata 12,3019,Drammen
+1003,Per,Olsen,28115500009,per.olsen@yahoo.no,+47 922 11 333,Fjordveien 44,5003,Bergen
+1004,Ingrid,Berg,01029000073,ingrid.berg@hotmail.com,+47 976 55 123,Skogsveien 8,7020,Trondheim
+1005,Lars,Johansen,30068800036,lars@johansen-consulting.no,+47 401 99 876,Havnegata 3,4006,Stavanger

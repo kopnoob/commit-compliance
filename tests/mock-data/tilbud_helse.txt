@@ -1,0 +1,20 @@
+Tilbud — Konsulentbistand
+
+Til: Helse Sør-Øst RHF
+Fra: Commit AS, org.nr. 123456789
+
+Konsulent: Erik Martinsen
+Kontaktperson kunde: Silje Bakken, silje.bakken@helse-sorost.no, tlf 922 44 556
+
+Oppdragsbeskrivelse:
+Utvikling av nytt pasientregistreringssystem med integrasjon mot 
+eksisterende journalsystem. Systemet skal håndtere sensitive 
+helseopplysninger i henhold til norsk personvernlovgivning.
+
+Timepris: 1 550 NOK eks. mva.
+Estimert omfang: 400 timer
+Totalt estimat: 620 000 NOK eks. mva.
+
+Faktureres til konto: 8601 11 23456
+
+Konsulentens fødselsdato brukes for tilgangskort: 15.03.1988

@@ -1,0 +1,19 @@
+{
+  "name": "commit-compliance",
+  "version": "0.1.0",
+  "description": "Data residency and compliance toolkit for Norwegian and EU enterprises. PII detection warns before sensitive data is processed. Tier switching (EU via AWS Bedrock / Global via Anthropic API) with audit logging.",
+  "author": "Commit AS",
+  "homepage": "https://github.com/commitas/commit-compliance",
+  "license": "MIT",
+  "keywords": [
+    "compliance",
+    "gdpr",
+    "data-residency",
+    "bedrock",
+    "eu",
+    "norway",
+    "pii",
+    "enterprise"
+  ],
+  "hooks": "./hooks/hooks.json"
+}

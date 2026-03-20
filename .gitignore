@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+
+# Claude Code project settings
+.claude/
+
+# Old reference files
+commit-compliance-komplett/
+CLAUDE-CODE-HANDOFF.md
+
+# Audit logs (generated at runtime)
+audit.log
