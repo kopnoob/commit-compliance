@@ -10,6 +10,7 @@ Built by [Commit AS](https://commit.no) for Norwegian and EU enterprises that ne
 |---------|-------------|
 | **PII scanning** | A pre-tool hook scans file content for Norwegian PII (fødselsnummer, bank accounts, health keywords) and warns before sensitive data is written. |
 | **Tier indicator** | Shows your current data residency tier (EU/Global) at session start. |
+| **Status line** | Always-visible colored tier badge in the Claude Code status bar. |
 | **Tier switching** | `/commit:tier eu` previews what EU routing would look like. Full switching coming in v0.2. |
 | **Data classification** | A skill that classifies data sensitivity and recommends the appropriate tier. |
 | **Compliance review** | `/commit:review` scans your codebase for GDPR issues — hardcoded PII, insecure data flows, missing consent. |
@@ -57,6 +58,27 @@ The PII scanner runs as a `PreToolUse` hook on Write/Edit operations. It detects
 - 🟡 **Mobilnumre** — Norwegian phone numbers
 
 The scanner **never blocks** your work — it only warns. On the global tier, warnings are more prominent.
+
+## Status line
+
+The plugin includes a status line script that shows your current tier with color coding:
+
+- 🔵 **EU** — blue, data stays in EU
+- 🔴 **GLOBAL** — red, data may leave EU
+- 🟡 **BEDROCK** — yellow, Bedrock but not EU-specific
+
+To enable, add to your `~/.claude/settings.json`:
+
+```json
+{
+  "statusLine": {
+    "type": "command",
+    "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/statusline.sh\""
+  }
+}
+```
+
+> **Note:** Claude Code supports one statusLine at a time. If you already have a status line configured, you'll need to choose one or create a wrapper script that combines both.
 
 ## v0.1 limitations
 
