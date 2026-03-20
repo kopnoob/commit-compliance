@@ -17,6 +17,5 @@
     "norway",
     "pii",
     "enterprise"
-  ],
-  "hooks": "./hooks/hooks.json"
+  ]
 }
