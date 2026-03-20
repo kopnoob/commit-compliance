@@ -18,23 +18,41 @@ Built by [Commit AS](https://commit.no) for Norwegian and EU enterprises that ne
 
 ## Installation
 
-**Step 1 — Install the plugin:**
+**Step 1 — Add the marketplace:**
 
-```bash
-/install-plugin github:kopnoob/commit-compliance
+```
+/plugin marketplace add kopnoob/commit-compliance
+```
+
+**Step 2 — Install the plugin:**
+
+```
+/plugin install commit-compliance@commit-compliance
+```
+
+**Step 3 — Reload:**
+
+```
+/reload-plugins
 ```
 
 This gives you PII scanning, tier indicator at startup, `/commit:tier`, `/commit:review`, and `/commit:setup`.
 
-**Step 2 (optional) — Enable the status line:**
+**Step 4 (optional) — Enable the status line:**
 
-```bash
+```
 /commit:statusline on
 ```
 
 This adds a permanent, color-coded tier badge to the Claude Code status bar. You can disable it anytime with `/commit:statusline off`.
 
 > **Note:** Claude Code supports one status line at a time. If you already have one configured, the command will warn you before replacing it.
+
+### Uninstall
+
+```
+/plugin uninstall commit-compliance@commit-compliance
+```
 
 ## Quick start
 

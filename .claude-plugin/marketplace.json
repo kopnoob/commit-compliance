@@ -1,0 +1,27 @@
+{
+  "name": "commit-compliance",
+  "owner": {
+    "name": "Commit AS",
+    "email": "post@commit.no"
+  },
+  "metadata": {
+    "description": "Data residency and GDPR compliance toolkit for Claude Code",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "commit-compliance",
+      "source": ".",
+      "description": "PII detection, tier switching (EU/Global), compliance review, and audit logging for Norwegian and EU enterprises.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Commit AS",
+        "email": "post@commit.no"
+      },
+      "homepage": "https://github.com/kopnoob/commit-compliance",
+      "license": "MIT",
+      "keywords": ["compliance", "gdpr", "data-residency", "bedrock", "eu", "norway", "pii", "enterprise"],
+      "category": "compliance"
+    }
+  ]
+}
