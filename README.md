@@ -18,10 +18,23 @@ Built by [Commit AS](https://commit.no) for Norwegian and EU enterprises that ne
 
 ## Installation
 
+**Step 1 — Install the plugin:**
+
 ```bash
-# In Claude Code:
-/install-plugin github:commitas/commit-compliance
+/install-plugin github:kopnoob/commit-compliance
 ```
+
+This gives you PII scanning, tier indicator at startup, `/commit:tier`, `/commit:review`, and `/commit:setup`.
+
+**Step 2 (optional) — Enable the status line:**
+
+```bash
+/commit:statusline on
+```
+
+This adds a permanent, color-coded tier badge to the Claude Code status bar. You can disable it anytime with `/commit:statusline off`.
+
+> **Note:** Claude Code supports one status line at a time. If you already have one configured, the command will warn you before replacing it.
 
 ## Quick start
 
@@ -34,6 +47,10 @@ Built by [Commit AS](https://commit.no) for Norwegian and EU enterprises that ne
 
 # Run a compliance review of your project
 /commit:review
+
+# Enable/disable the status line
+/commit:statusline on
+/commit:statusline off
 
 # First-time setup guide
 /commit:setup
@@ -61,24 +78,13 @@ The scanner **never blocks** your work — it only warns. On the global tier, wa
 
 ## Status line
 
-The plugin includes a status line script that shows your current tier with color coding:
+The optional status line shows your current tier with color coding:
 
 - 🔵 **EU** — blue, data stays in EU
 - 🔴 **GLOBAL** — red, data may leave EU
 - 🟡 **BEDROCK** — yellow, Bedrock but not EU-specific
 
-To enable, add to your `~/.claude/settings.json`:
-
-```json
-{
-  "statusLine": {
-    "type": "command",
-    "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/statusline.sh\""
-  }
-}
-```
-
-> **Note:** Claude Code supports one statusLine at a time. If you already have a status line configured, you'll need to choose one or create a wrapper script that combines both.
+Enable with `/commit:statusline on`, disable with `/commit:statusline off`.
 
 ## v0.1 limitations
 

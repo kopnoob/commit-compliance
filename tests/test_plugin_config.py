@@ -32,6 +32,7 @@ class TestPluginStructure(unittest.TestCase):
         self.assertTrue((commands_dir / "tier.md").exists())
         self.assertTrue((commands_dir / "setup.md").exists())
         self.assertTrue((commands_dir / "review.md").exists())
+        self.assertTrue((commands_dir / "statusline.md").exists())
 
     def test_agents_exist(self):
         self.assertTrue((PLUGIN_ROOT / "agents" / "compliance-reviewer.md").exists())
@@ -175,6 +176,32 @@ class TestCommandFiles(unittest.TestCase):
     def test_review_command_has_name(self):
         fm = self._read_frontmatter_manual(PLUGIN_ROOT / "commands" / "review.md")
         self.assertEqual(fm.get("name"), "review")
+
+    def test_statusline_command_has_name(self):
+        fm = self._read_frontmatter_manual(PLUGIN_ROOT / "commands" / "statusline.md")
+        self.assertEqual(fm.get("name"), "statusline")
+
+    def test_statusline_command_has_write_permission(self):
+        """Statusline command needs Write to update settings.json."""
+        with open(PLUGIN_ROOT / "commands" / "statusline.md") as f:
+            content = f.read()
+        for line in content.split("\n"):
+            if "allowed-tools" in line:
+                self.assertIn("Write", line,
+                    "Statusline command needs Write permission to update settings.json")
+                break
+
+    def test_statusline_command_reads_installed_plugins(self):
+        """Statusline command should look up install path from installed_plugins.json."""
+        with open(PLUGIN_ROOT / "commands" / "statusline.md") as f:
+            content = f.read()
+        self.assertIn("installed_plugins.json", content)
+
+    def test_statusline_command_uses_absolute_path(self):
+        """Statusline command should use absolute path, not CLAUDE_PLUGIN_ROOT."""
+        with open(PLUGIN_ROOT / "commands" / "statusline.md") as f:
+            content = f.read()
+        self.assertIn("absolute path", content.lower())
 
     def test_tier_command_is_readonly(self):
         """Tier command in v0.1 should NOT have Write permission."""
