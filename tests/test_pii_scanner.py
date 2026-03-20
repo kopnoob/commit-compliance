@@ -194,6 +194,44 @@ class TestTierDetection(unittest.TestCase):
             self.assertEqual(pii_scanner.get_current_tier(), "global")
 
 
+class TestTierStateFile(unittest.TestCase):
+    """Test that the state file takes priority over env vars."""
+
+    def setUp(self):
+        import tempfile
+        self.tmpdir = tempfile.mkdtemp()
+        self.state_dir = Path(self.tmpdir) / ".claude" / "commit-compliance"
+        self.state_dir.mkdir(parents=True)
+        self.state_file = self.state_dir / "tier"
+
+    def tearDown(self):
+        import shutil
+        shutil.rmtree(self.tmpdir)
+
+    def test_state_file_eu(self):
+        self.state_file.write_text("eu")
+        with patch.dict(os.environ, {}, clear=True), \
+             patch.object(Path, "home", return_value=Path(self.tmpdir)):
+            self.assertEqual(pii_scanner.get_current_tier(), "eu")
+
+    def test_state_file_global(self):
+        self.state_file.write_text("global")
+        with patch.dict(os.environ, {}, clear=True), \
+             patch.object(Path, "home", return_value=Path(self.tmpdir)):
+            self.assertEqual(pii_scanner.get_current_tier(), "global")
+
+    def test_state_file_overrides_env(self):
+        self.state_file.write_text("eu")
+        with patch.dict(os.environ, {"COMMIT_COMPLIANCE_SIMULATE_TIER": "global"}, clear=True), \
+             patch.object(Path, "home", return_value=Path(self.tmpdir)):
+            self.assertEqual(pii_scanner.get_current_tier(), "eu")
+
+    def test_missing_state_file_falls_back(self):
+        with patch.dict(os.environ, {"COMMIT_COMPLIANCE_SIMULATE_TIER": "eu"}, clear=True), \
+             patch.object(Path, "home", return_value=Path(self.tmpdir) / "nonexistent"):
+            self.assertEqual(pii_scanner.get_current_tier(), "eu")
+
+
 class TestHookInputParsing(unittest.TestCase):
     """Test the hook input parsing for different Claude Code tool formats."""
 
@@ -390,7 +428,7 @@ class TestWarningFormatting(unittest.TestCase):
         msg = pii_scanner.format_warning(findings, "global", "test.csv")
         self.assertIn("GLOBAL", msg)
         self.assertIn("🚨", msg)
-        self.assertIn("/commit:tier eu", msg)
+        self.assertIn("/commit-compliance:tier eu", msg)
 
     def test_eu_high_info(self):
         findings = [{"type": "fodselsnummer", "description": "Fnr", "severity": "HIGH", "count": 1, "sample": "0101..."}]

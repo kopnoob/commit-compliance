@@ -112,6 +112,75 @@ class TestStatuslineOutput(unittest.TestCase):
         self.assertIn("🟡", stdout)
 
 
+class TestStatuslineStateFile(unittest.TestCase):
+    """Test that the state file takes priority over env vars."""
+
+    def setUp(self):
+        import tempfile
+        self.tmpdir = tempfile.mkdtemp()
+        self.state_dir = Path(self.tmpdir) / ".claude" / "commit-compliance"
+        self.state_dir.mkdir(parents=True)
+        self.state_file = self.state_dir / "tier"
+
+    def tearDown(self):
+        import shutil
+        shutil.rmtree(self.tmpdir)
+
+    def _run_with_home(self, env_override=None):
+        env = os.environ.copy()
+        for key in ("COMMIT_COMPLIANCE_SIMULATE_TIER", "CLAUDE_CODE_USE_BEDROCK",
+                     "AWS_REGION", "ANTHROPIC_MODEL"):
+            env.pop(key, None)
+        env["HOME"] = self.tmpdir
+        if env_override:
+            env.update(env_override)
+        result = subprocess.run(
+            ["/bin/bash", SCRIPT],
+            input="{}",
+            capture_output=True,
+            text=True,
+            env=env,
+            timeout=5,
+        )
+        return result.stdout, result.returncode
+
+    def test_state_file_eu(self):
+        self.state_file.write_text("eu")
+        stdout, code = self._run_with_home()
+        self.assertEqual(code, 0)
+        clean = strip_ansi(stdout)
+        self.assertIn("EU", clean)
+        self.assertIn("🔵", stdout)
+
+    def test_state_file_global(self):
+        self.state_file.write_text("global")
+        stdout, code = self._run_with_home()
+        self.assertEqual(code, 0)
+        clean = strip_ansi(stdout)
+        self.assertIn("GLOBAL", clean)
+        self.assertIn("🔴", stdout)
+
+    def test_state_file_overrides_env(self):
+        """State file should take priority over SIMULATE env var."""
+        self.state_file.write_text("eu")
+        stdout, _ = self._run_with_home({"COMMIT_COMPLIANCE_SIMULATE_TIER": "global"})
+        clean = strip_ansi(stdout)
+        self.assertIn("EU", clean)
+
+    def test_no_state_file_falls_back_to_env(self):
+        """Without state file, env var should work as before."""
+        stdout, _ = self._run_with_home({"COMMIT_COMPLIANCE_SIMULATE_TIER": "eu"})
+        clean = strip_ansi(stdout)
+        self.assertIn("EU", clean)
+
+    def test_empty_state_file_falls_back(self):
+        """Empty state file should fall back to env vars."""
+        self.state_file.write_text("")
+        stdout, _ = self._run_with_home({"COMMIT_COMPLIANCE_SIMULATE_TIER": "eu"})
+        clean = strip_ansi(stdout)
+        self.assertIn("EU", clean)
+
+
 class TestStatuslineScript(unittest.TestCase):
 
     def test_script_exists(self):

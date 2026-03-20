@@ -91,9 +91,18 @@ PATTERNS = {
 # ── Core scanning ────────────────────────────────────────────
 
 
+def read_tier_state_file():
+    """Read tier preference from state file, if it exists."""
+    state_path = Path.home() / ".claude" / "commit-compliance" / "tier"
+    try:
+        return state_path.read_text().strip().lower()
+    except (OSError, IOError):
+        return ""
+
+
 def get_current_tier():
     """Detect current data residency tier from environment."""
-    sim = os.environ.get("COMMIT_COMPLIANCE_SIMULATE_TIER", "").lower()
+    sim = read_tier_state_file() or os.environ.get("COMMIT_COMPLIANCE_SIMULATE_TIER", "").lower()
     if sim in ("eu", "global", "bedrock-other"):
         return sim
     if os.environ.get("CLAUDE_CODE_USE_BEDROCK") == "1":
@@ -186,7 +195,7 @@ def format_warning(findings, tier, filepath):
 
     if tier == "global" and high:
         lines.append("   🚨 Du er på GLOBAL tier — sensitiv data vil sendes utenfor EU!")
-        lines.append("   Vurder: /commit:tier eu  for å bytte til EU-ruting")
+        lines.append("   Vurder: /commit-compliance:tier eu  for å bytte til EU-ruting")
     elif tier == "eu" and high:
         lines.append("   ℹ️  Data rutes via EU. Vurder om dette er tilstrekkelig for datatypen.")
     elif tier == "global" and medium:

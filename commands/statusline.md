@@ -1,14 +1,14 @@
 ---
 name: statusline
-description: "Enable or disable the tier status line in Claude Code. Usage: /commit:statusline [on|off]"
+description: "Enable or disable the tier status line in Claude Code. Usage: /commit-compliance:statusline [on|off]"
 allowed-tools: ["Bash", "Read", "Write"]
 ---
 
-# /commit:statusline — Tier Status Line
+# /commit-compliance:statusline — Tier Status Line
 
 Manage the always-visible tier indicator in the Claude Code status bar.
 
-## /commit:statusline or /commit:statusline on
+## /commit-compliance:statusline or /commit-compliance:statusline on
 
 Enable the tier status line.
 
@@ -48,10 +48,10 @@ Use the **absolute path** from `installPath` — do not use `${CLAUDE_PLUGIN_ROO
    🟡 BEDROCK — gul, Bedrock men ikke EU
 
    Endringen gjelder fra neste sesjon.
-   For å deaktivere: /commit:statusline off
+   For å deaktivere: /commit-compliance:statusline off
 ```
 
-## /commit:statusline off
+## /commit-compliance:statusline off
 
 Disable the tier status line.
 

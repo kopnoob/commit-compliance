@@ -203,26 +203,22 @@ class TestCommandFiles(unittest.TestCase):
             content = f.read()
         self.assertIn("absolute path", content.lower())
 
-    def test_tier_command_is_readonly(self):
-        """Tier command in v0.1 should NOT have Write permission."""
+    def test_tier_command_has_write_permission(self):
+        """Tier command needs Write to update the state file."""
         with open(PLUGIN_ROOT / "commands" / "tier.md") as f:
             content = f.read()
-        # Extract allowed-tools line
         for line in content.split("\n"):
             if "allowed-tools" in line:
-                self.assertNotIn("Write", line,
-                    "Tier command should not have Write permission in v0.1 (dry-run mode)")
+                self.assertIn("Write", line,
+                    "Tier command needs Write permission for state file")
                 break
 
-    def test_tier_command_mentions_preview(self):
-        """Tier command should mention it's a preview/dry-run."""
+    def test_tier_command_writes_state_file(self):
+        """Tier command should reference the state file path."""
         with open(PLUGIN_ROOT / "commands" / "tier.md") as f:
             content = f.read()
-        content_lower = content.lower()
-        self.assertTrue(
-            "preview" in content_lower or "forhåndsvisning" in content_lower or "dry" in content_lower,
-            "Tier command should mention preview/dry-run mode"
-        )
+        self.assertIn("commit-compliance/tier", content,
+            "Tier command should reference the state file")
 
     def test_tier_command_never_modify(self):
         """Tier command instructions must say NEVER modify settings."""

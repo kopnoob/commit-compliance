@@ -26,7 +26,7 @@ When the user is working with data or files that may be sensitive, help them cla
 - Kontraktsinformasjon med persondata
 - Helse-relaterte data som er pseudonymisert
 
-**Anbefaling:** Bytt til EU tier (`/commit:tier eu`) før behandling. Data forblir innenfor EU.
+**Anbefaling:** Bytt til EU tier (`/commit-compliance:tier eu`) før behandling. Data forblir innenfor EU.
 
 ### 🟢 INTERN (Tier 2 eller 3)
 - Intern forretningsdokumentasjon uten persondata

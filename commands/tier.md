@@ -1,106 +1,100 @@
 ---
 name: tier
-description: "Vis eller forhåndsvis tier-bytte for data residency. Usage: /commit:tier [eu|global|status]"
-allowed-tools: ["Bash", "Read"]
+description: "Vis eller bytt tier for data residency. Usage: /commit-compliance:tier [eu|global|status]"
+allowed-tools: ["Bash", "Read", "Write"]
 ---
 
-# /commit:tier — Data Residency Tier
+# /commit-compliance:tier — Data Residency Tier
 
 You are a compliance assistant for Commit AS's data residency plugin.
 
-When the user runs `/commit:tier`, do the following based on the argument:
+When the user runs `/commit-compliance:tier`, do the following based on the argument:
 
-## /commit:tier status (default if no argument)
+## /commit-compliance:tier status (default if no argument)
 
 Show the current tier configuration without changing anything.
 
-1. Check environment variables (`CLAUDE_CODE_USE_BEDROCK`, `AWS_REGION`, `ANTHROPIC_MODEL`)
-2. Check if `COMMIT_COMPLIANCE_SIMULATE_TIER` is set
-3. Display a clear summary:
+1. Check the tier state file at `~/.claude/commit-compliance/tier` (if it exists)
+2. Check environment variables (`COMMIT_COMPLIANCE_SIMULATE_TIER`, `CLAUDE_CODE_USE_BEDROCK`, `AWS_REGION`, `ANTHROPIC_MODEL`)
+3. Determine the active tier using the same priority as the hooks:
+   - State file > SIMULATE env var > Bedrock env vars > default GLOBAL
+4. Display a clear summary:
 
 ```
 ╔══════════════════════════════════════╗
 ║   Commit Compliance — Tier Status   ║
 ╠══════════════════════════════════════╣
 ║ Aktiv tier:      GLOBAL             ║
+║ Kilde:           Standard           ║
 ║ Region:          Anthropic (US)     ║
 ║ Data residency:  Global             ║
 ║ PII-skanner:     Aktiv              ║
 ╚══════════════════════════════════════╝
 ```
 
-## /commit:tier eu
+The "Kilde" field shows where the tier was determined from:
+- `~/.claude/commit-compliance/tier` — if the state file is present
+- `COMMIT_COMPLIANCE_SIMULATE_TIER` — if the env var is set
+- `Bedrock-konfigurasjon` — if CLAUDE_CODE_USE_BEDROCK=1
+- `Standard` — if using the default (GLOBAL)
 
-**IMPORTANT: This is a PREVIEW in v0.1. Do NOT modify any settings files.**
+## /commit-compliance:tier eu
 
-Show what WOULD happen if tier switching were active:
+Switch to EU tier. This updates the tier state file so that the status line and all hooks immediately reflect the change.
 
-1. Display a clear banner:
+1. Create the directory `~/.claude/commit-compliance/` if it doesn't exist (use `mkdir -p`).
+2. Write `eu` to the file `~/.claude/commit-compliance/tier`.
+3. Display:
+
 ```
 ╔══════════════════════════════════════════════╗
-║  🔵 FORHÅNDSVISNING — Tier EU               ║
+║  🔵 Tier byttet til EU                      ║
 ╠══════════════════════════════════════════════╣
-║  Tier-bytte er ikke aktivert i denne        ║
-║  versjonen. Her er hva som ville skjedd:    ║
+║  Statuslinja og hooks bruker nå EU tier.    ║
 ╚══════════════════════════════════════════════╝
 ```
 
-2. Show the settings that WOULD be written to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "CLAUDE_CODE_USE_BEDROCK": "1",
-    "AWS_REGION": "eu-central-1",
-    "ANTHROPIC_MODEL": "eu.anthropic.claude-sonnet-4-6",
-    "ANTHROPIC_DEFAULT_OPUS_MODEL": "eu.anthropic.claude-opus-4-6-v1",
-    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "eu.anthropic.claude-haiku-4-5-20251001-v1:0"
-  }
-}
-```
+4. Explain:
+   - ✅ Statuslinja viser nå 🔵 EU tier
+   - ✅ PII-skanneren bruker EU-kontekst for advarsler
+   - ⚠️ Merk: dette endrer **visning og advarsler**, ikke faktisk API-ruting
+   - ⚠️ For faktisk EU-ruting via Bedrock kreves AWS-konto med Bedrock-tilgang
+   - 🔧 Kontakt Commit AS for hjelp med full EU-oppsett: post@commit.no
 
-3. Explain:
-   - ✅ Trafikk ville blitt rutet gjennom EU AWS-regioner (Frankfurt, Stockholm, Paris)
-   - 💰 EU Bedrock har ca. 10% pristillegg over global prising
-   - ⚠️ Krever AWS-konto med Bedrock-tilgang og konfigurerte credentials
-   - 🔧 Kontakt Commit AS for hjelp med oppsett: post@commit.no
-   - 📋 Tier-bytte vil bli aktivert i en kommende versjon
+## /commit-compliance:tier global
 
-4. Do NOT write to any files. Do NOT modify settings.json. Do NOT set environment variables.
+Switch to GLOBAL tier. This updates the tier state file.
 
-## /commit:tier global
+1. Create the directory `~/.claude/commit-compliance/` if it doesn't exist (use `mkdir -p`).
+2. Write `global` to the file `~/.claude/commit-compliance/tier`.
+3. Display:
 
-**IMPORTANT: This is a PREVIEW in v0.1. Do NOT modify any settings files.**
-
-Show what WOULD happen:
-
-1. Display a clear banner:
 ```
 ╔══════════════════════════════════════════════╗
-║  🔴 FORHÅNDSVISNING — Tier GLOBAL           ║
+║  🔴 Tier byttet til GLOBAL                  ║
 ╠══════════════════════════════════════════════╣
-║  Tier-bytte er ikke aktivert i denne        ║
-║  versjonen. Her er hva som ville skjedd:    ║
+║  Statuslinja og hooks bruker nå GLOBAL tier.║
 ╚══════════════════════════════════════════════╝
 ```
 
-2. Show that the following env vars WOULD be removed:
-   - `CLAUDE_CODE_USE_BEDROCK`
-   - `AWS_REGION`
-   - `ANTHROPIC_MODEL`
-   - `ANTHROPIC_DEFAULT_OPUS_MODEL`
-   - `ANTHROPIC_DEFAULT_HAIKU_MODEL`
-
-3. Explain:
-   - ✅ Trafikk ville brukt Anthropics direkte API (global ruting)
+4. Explain:
+   - ✅ Statuslinja viser nå 🔴 GLOBAL tier
    - ⚠️ Data kan prosesseres utenfor EU
    - ⚠️ Ikke bruk for persondata eller sensitive opplysninger
-   - 📋 Tier-bytte vil bli aktivert i en kommende versjon
 
-4. Do NOT write to any files. Do NOT modify settings.json.
+## /commit-compliance:tier reset
+
+Remove the tier state file so that tier detection falls back to environment variables.
+
+1. Delete `~/.claude/commit-compliance/tier` if it exists.
+2. Display:
+```
+✅ Tier-preferanse fjernet. Faller tilbake til miljøvariabler.
+```
 
 ## Important rules
 
-- **NEVER modify settings.json, environment variables, or any configuration files**
-- `/commit:tier` uten argument = vis status
-- Always be honest that tier switching is preview-only in v0.1
+- **NEVER modify `~/.claude/settings.json` or environment variables** — only write to the state file `~/.claude/commit-compliance/tier`
+- `/commit-compliance:tier` uten argument = vis status
+- The state file only controls display/warnings, not actual API routing
 - If the user asks about "tier 1" or "lokal", explain that local on-premise inference is a separate concept

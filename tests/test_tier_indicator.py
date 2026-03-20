@@ -60,6 +60,48 @@ class TestTierDetection(unittest.TestCase):
             self.assertEqual(info["tier"], "EU")
 
 
+class TestTierStateFile(unittest.TestCase):
+    """Test that the state file takes priority over env vars."""
+
+    def setUp(self):
+        import tempfile
+        self.tmpdir = tempfile.mkdtemp()
+        self.state_dir = Path(self.tmpdir) / ".claude" / "commit-compliance"
+        self.state_dir.mkdir(parents=True)
+        self.state_file = self.state_dir / "tier"
+
+    def tearDown(self):
+        import shutil
+        shutil.rmtree(self.tmpdir)
+
+    def test_state_file_eu(self):
+        self.state_file.write_text("eu")
+        with patch.dict(os.environ, {}, clear=True), \
+             patch.object(Path, "home", return_value=Path(self.tmpdir)):
+            info = tier_indicator.get_tier_info()
+            self.assertEqual(info["tier"], "EU")
+
+    def test_state_file_global(self):
+        self.state_file.write_text("global")
+        with patch.dict(os.environ, {}, clear=True), \
+             patch.object(Path, "home", return_value=Path(self.tmpdir)):
+            info = tier_indicator.get_tier_info()
+            self.assertEqual(info["tier"], "GLOBAL")
+
+    def test_state_file_overrides_env(self):
+        self.state_file.write_text("eu")
+        with patch.dict(os.environ, {"COMMIT_COMPLIANCE_SIMULATE_TIER": "global"}, clear=True), \
+             patch.object(Path, "home", return_value=Path(self.tmpdir)):
+            info = tier_indicator.get_tier_info()
+            self.assertEqual(info["tier"], "EU")
+
+    def test_missing_state_file_falls_back_to_env(self):
+        with patch.dict(os.environ, {"COMMIT_COMPLIANCE_SIMULATE_TIER": "eu"}, clear=True), \
+             patch.object(Path, "home", return_value=Path(self.tmpdir) / "nonexistent"):
+            info = tier_indicator.get_tier_info()
+            self.assertEqual(info["tier"], "EU")
+
+
 class TestRenderBox(unittest.TestCase):
 
     def test_eu_box_renders(self):

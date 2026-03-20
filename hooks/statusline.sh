@@ -13,7 +13,15 @@
 cat > /dev/null
 
 # Determine tier
-SIM="${COMMIT_COMPLIANCE_SIMULATE_TIER:-}"
+# Priority: 1. State file  2. SIMULATE env var  3. Bedrock env vars  4. Default GLOBAL
+STATE_FILE="${HOME}/.claude/commit-compliance/tier"
+SIM=""
+if [ -f "$STATE_FILE" ]; then
+    SIM="$(cat "$STATE_FILE" 2>/dev/null | tr -d '[:space:]')"
+fi
+if [ -z "$SIM" ]; then
+    SIM="${COMMIT_COMPLIANCE_SIMULATE_TIER:-}"
+fi
 
 if [ "$SIM" = "eu" ]; then
     TIER="EU"

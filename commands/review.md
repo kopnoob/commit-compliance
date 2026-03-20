@@ -1,10 +1,10 @@
 ---
 name: review
-description: "Run a GDPR compliance review of the current project. Scans for hardcoded PII, insecure data flows, and missing privacy controls. Usage: /commit:review [path]"
+description: "Run a GDPR compliance review of the current project. Scans for hardcoded PII, insecure data flows, and missing privacy controls. Usage: /commit-compliance:review [path]"
 allowed-tools: ["Read", "Bash", "Grep", "Glob"]
 ---
 
-# /commit:review — Project Compliance Review
+# /commit-compliance:review — Project Compliance Review
 
 Invoke the `compliance-reviewer` agent to scan the current project (or a specified path) for GDPR and data protection issues.
 

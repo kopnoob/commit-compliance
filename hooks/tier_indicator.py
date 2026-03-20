@@ -11,11 +11,21 @@ Runs as a Notification hook with runOnce=true.
 import os
 import sys
 from datetime import datetime, timezone
+from pathlib import Path
+
+
+def read_tier_state_file():
+    """Read tier preference from state file, if it exists."""
+    state_path = Path.home() / ".claude" / "commit-compliance" / "tier"
+    try:
+        return state_path.read_text().strip().lower()
+    except (OSError, IOError):
+        return ""
 
 
 def get_tier_info():
     """Detect current tier from environment."""
-    sim = os.environ.get("COMMIT_COMPLIANCE_SIMULATE_TIER", "").lower()
+    sim = read_tier_state_file() or os.environ.get("COMMIT_COMPLIANCE_SIMULATE_TIER", "").lower()
     if sim == "eu":
         return {
             "tier": "EU",

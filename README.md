@@ -11,9 +11,9 @@ Built by [Commit AS](https://commit.no) for Norwegian and EU enterprises that ne
 | **PII scanning** | A pre-tool hook scans file content for Norwegian PII (fødselsnummer, bank accounts, health keywords) and warns before sensitive data is written. |
 | **Tier indicator** | Shows your current data residency tier (EU/Global) at session start. |
 | **Status line** | Always-visible colored tier badge in the Claude Code status bar. |
-| **Tier switching** | `/commit:tier eu` previews what EU routing would look like. Full switching coming in v0.2. |
+| **Tier switching** | `/commit-compliance:tier eu` switches your tier preference. The status line and hooks update immediately. |
 | **Data classification** | A skill that classifies data sensitivity and recommends the appropriate tier. |
-| **Compliance review** | `/commit:review` scans your codebase for GDPR issues — hardcoded PII, insecure data flows, missing consent. |
+| **Compliance review** | `/commit-compliance:review` scans your codebase for GDPR issues — hardcoded PII, insecure data flows, missing consent. |
 | **Audit logging** | All PII detections are logged to `~/.claude/commit-compliance/audit.log`. |
 
 ## Installation
@@ -36,15 +36,15 @@ Built by [Commit AS](https://commit.no) for Norwegian and EU enterprises that ne
 /reload-plugins
 ```
 
-This gives you PII scanning, tier indicator at startup, `/commit:tier`, `/commit:review`, and `/commit:setup`.
+This gives you PII scanning, tier indicator at startup, `/commit-compliance:tier`, `/commit-compliance:review`, and `/commit-compliance:setup`.
 
 **Step 4 (optional) — Enable the status line:**
 
 ```
-/commit:statusline on
+/commit-compliance:statusline on
 ```
 
-This adds a permanent, color-coded tier badge to the Claude Code status bar. You can disable it anytime with `/commit:statusline off`.
+This adds a permanent, color-coded tier badge to the Claude Code status bar. You can disable it anytime with `/commit-compliance:statusline off`.
 
 > **Note:** Claude Code supports one status line at a time. If you already have one configured, the command will warn you before replacing it.
 
@@ -58,20 +58,20 @@ This adds a permanent, color-coded tier badge to the Claude Code status bar. You
 
 ```bash
 # Check current tier status
-/commit:tier status
+/commit-compliance:tier status
 
-# Preview what EU tier switching would do
-/commit:tier eu
+# Switch to EU tier
+/commit-compliance:tier eu
 
 # Run a compliance review of your project
-/commit:review
+/commit-compliance:review
 
 # Enable/disable the status line
-/commit:statusline on
-/commit:statusline off
+/commit-compliance:statusline on
+/commit-compliance:statusline off
 
 # First-time setup guide
-/commit:setup
+/commit-compliance:setup
 ```
 
 ## Tier overview
@@ -102,11 +102,11 @@ The optional status line shows your current tier with color coding:
 - 🔴 **GLOBAL** — red, data may leave EU
 - 🟡 **BEDROCK** — yellow, Bedrock but not EU-specific
 
-Enable with `/commit:statusline on`, disable with `/commit:statusline off`.
+Enable with `/commit-compliance:statusline on`, disable with `/commit-compliance:statusline off`.
 
 ## v0.1 limitations
 
-- **Tier switching is preview-only.** `/commit:tier eu` shows what would happen, but doesn't change configuration. Full switching requires AWS Bedrock setup and will be enabled in v0.2.
+- **Tier switching updates display and warnings only.** `/commit-compliance:tier eu` changes the status line and PII scanner context, but does not configure actual API routing via Bedrock. Full Bedrock routing requires AWS account setup — see `/commit-compliance:setup`.
 - **No MCP server.** The plugin uses hooks and commands, not an MCP integration.
 
 ## Requirements
