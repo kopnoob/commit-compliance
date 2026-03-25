@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commit Compliance — Claude Code med EU Data Residency</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --commit-blue: #0f1b2d;
+      --commit-blue-light: #162544;
+      --accent: #ef4444;
+      --accent-hover: #dc2626;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-400: #9ca3af;
+      --gray-600: #4b5563;
+      --gray-800: #1f2937;
+      --white: #ffffff;
+      --black: #000000;
+      --radius: 1rem;
+      --radius-lg: 1.5rem;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--gray-800);
+      line-height: 1.6;
+      background: var(--gray-50);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ── Navigation ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(15, 27, 45, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    .nav-logo {
+      height: 1.5rem;
+      width: auto;
+      filter: brightness(0) invert(1);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.5rem;
+      transition: color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover {
+      color: rgba(255,255,255,0.7);
+    }
+
+    .nav-links .cta-btn {
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 2rem;
+      padding: 0.5rem 1.25rem;
+    }
+
+    .nav-links .cta-btn:hover {
+      background: var(--white);
+      color: var(--black);
+    }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--commit-blue);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(239, 68, 68, 0.08) 0%, transparent 50%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      color: var(--white);
+      padding: 8rem 1.5rem 5rem;
+      max-width: 800px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 2rem;
+      padding: 0.4rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .hero-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.25rem, 5vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 span {
+      color: var(--accent);
+    }
+
+    .hero p {
+      font-size: 1.125rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.75);
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent);
+      color: var(--white);
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.875rem 2rem;
+      border-radius: 2rem;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: var(--white);
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.875rem 2rem;
+      border-radius: 2rem;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.25);
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.4);
+    }
+
+    /* ── Section base ── */
+    section {
+      padding: 5rem 0;
+    }
+
+    .section-dark {
+      background: var(--commit-blue);
+      color: var(--white);
+    }
+
+    .section-white {
+      background: var(--white);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-header .label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-header h2 {
+      font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+
+    .section-dark .section-header h2 {
+      color: var(--white);
+    }
+
+    .section-header p {
+      font-size: 1.05rem;
+      color: var(--gray-600);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .section-dark .section-header p {
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* ── Problem / Why ── */
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .why-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      transition: box-shadow 0.2s, transform 0.15s;
+    }
+
+    .why-card:hover {
+      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+      transform: translateY(-2px);
+    }
+
+    .why-card .icon {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .icon-red { background: rgba(239, 68, 68, 0.1); }
+    .icon-blue { background: rgba(59, 130, 246, 0.1); }
+    .icon-green { background: rgba(34, 197, 94, 0.1); }
+
+    .why-card h3 {
+      font-size: 1.125rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+
+    .why-card p {
+      font-size: 0.925rem;
+      color: var(--gray-600);
+      line-height: 1.65;
+    }
+
+    /* ── Deliverables ── */
+    .deliverables-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .deliverable-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .deliverable-card:hover {
+      border-color: rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .deliverable-number {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+
+    .deliverable-card h3 {
+      font-size: 1.125rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+      color: var(--white);
+    }
+
+    .deliverable-card p {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.65;
+    }
+
+    /* ── Architecture ── */
+    .arch-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .arch-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--gray-200);
+    }
+
+    .arch-card.highlighted {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+
+    .arch-card-header {
+      padding: 1.5rem 2rem;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .arch-card.highlighted .arch-card-header {
+      background: rgba(239, 68, 68, 0.05);
+      color: var(--accent);
+    }
+
+    .arch-card:not(.highlighted) .arch-card-header {
+      background: var(--gray-50);
+      color: var(--gray-600);
+    }
+
+    .arch-card-body {
+      padding: 1.5rem 2rem;
+    }
+
+    .arch-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid var(--gray-100);
+      font-size: 0.9rem;
+    }
+
+    .arch-row:last-child { border-bottom: none; }
+
+    .arch-label {
+      color: var(--gray-600);
+      font-weight: 500;
+    }
+
+    .arch-value {
+      font-weight: 600;
+      color: var(--gray-800);
+      text-align: right;
+    }
+
+    .arch-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(34, 197, 94, 0.1);
+      color: #16a34a;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 2rem;
+    }
+
+    .arch-flow {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      text-align: center;
+    }
+
+    .flow-steps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+    }
+
+    .flow-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 1.5rem;
+    }
+
+    .flow-icon {
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .flow-step-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gray-800);
+    }
+
+    .flow-step-sub {
+      font-size: 0.7rem;
+      color: var(--gray-400);
+    }
+
+    .flow-arrow {
+      font-size: 1.25rem;
+      color: var(--gray-400);
+      margin: 0 0.25rem;
+    }
+
+    /* ── Plugin Demo ── */
+    .demo-intro {
+      max-width: 700px;
+      margin: 0 auto 3rem;
+      text-align: center;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.7;
+    }
+
+    .demo-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+
+    .demo-item {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .demo-item.reverse {
+      direction: rtl;
+    }
+
+    .demo-item.reverse > * {
+      direction: ltr;
+    }
+
+    .demo-item-full {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .demo-screenshot {
+      width: 100%;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .demo-screenshot:hover {
+      transform: scale(1.02);
+      box-shadow: 0 25px 70px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1);
+    }
+
+    .demo-screenshot-large {
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .demo-text {
+      padding: 1rem 0;
+    }
+
+    .demo-text .step-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .demo-text h3 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+      line-height: 1.3;
+    }
+
+    .demo-text p {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.7;
+    }
+
+    .demo-text .highlight-list {
+      list-style: none;
+      margin-top: 1rem;
+    }
+
+    .demo-text .highlight-list li {
+      padding: 0.35rem 0;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.6);
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+
+    .demo-text .highlight-list li::before {
+      content: '→';
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+      .demo-item, .demo-item.reverse {
+        grid-template-columns: 1fr;
+        direction: ltr;
+      }
+
+      .demo-text { order: -1; }
+    }
+
+    /* ── Compliance docs ── */
+    .docs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .doc-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      position: relative;
+      transition: box-shadow 0.2s, transform 0.15s;
+    }
+
+    .doc-card:hover {
+      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+      transform: translateY(-2px);
+    }
+
+    .doc-number {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--gray-400);
+      background: var(--gray-100);
+      width: 1.75rem;
+      height: 1.75rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .doc-icon {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .doc-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+
+    .doc-card p {
+      font-size: 0.85rem;
+      color: var(--gray-600);
+      line-height: 1.6;
+    }
+
+    /* ── Timeline ── */
+    .timeline {
+      position: relative;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 1.5rem;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 1.75rem;
+      padding-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .timeline-item:last-child { padding-bottom: 0; }
+
+    .timeline-dot {
+      width: 3rem;
+      min-width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      border: 2px solid rgba(255,255,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      position: relative;
+      z-index: 1;
+    }
+
+    .timeline-content h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      color: var(--white);
+    }
+
+    .timeline-content p {
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.6;
+    }
+
+    .timeline-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .timeline-meta span {
+      background: rgba(255,255,255,0.06);
+      padding: 0.2rem 0.6rem;
+      border-radius: 2rem;
+    }
+
+    /* ── Contact Form ── */
+    .contact-form {
+      max-width: 480px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact-form .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .contact-form label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.03em;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 0.5rem;
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      font-family: inherit;
+      color: var(--white);
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder {
+      color: rgba(255,255,255,0.25);
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .contact-form textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .contact-form .btn-primary {
+      align-self: flex-start;
+      font-family: inherit;
+    }
+
+    .form-success {
+      display: none;
+      text-align: center;
+      color: rgba(255,255,255,0.8);
+      font-size: 1rem;
+      padding: 2rem 0;
+    }
+
+    .form-success.visible {
+      display: block;
+    }
+
+    @media (max-width: 640px) {
+      .contact-form .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: var(--commit-blue);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 100%, rgba(239, 68, 68, 0.1) 0%, transparent 60%);
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      color: var(--white);
+      padding: 2rem 0;
+    }
+
+    .cta-content h2 {
+      font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      margin-bottom: 1rem;
+    }
+
+    .cta-content p {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.6);
+      max-width: 500px;
+      margin: 0 auto 2rem;
+      line-height: 1.7;
+    }
+
+    .cta-steps {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+
+    .cta-step {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .cta-step-num {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+
+    /* ── Footer ── */
+    footer {
+      background: var(--commit-blue);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 2rem 0;
+    }
+
+    .footer-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .footer-logo {
+      height: 1.25rem;
+      filter: brightness(0) invert(1);
+      opacity: 0.4;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      section { padding: 3.5rem 0; }
+
+      .hero-content { padding: 7rem 1rem 3rem; }
+
+      .nav-links { gap: 0.25rem; }
+      .nav-links a { font-size: 0.8rem; padding: 0.4rem 0.5rem; }
+
+      .flow-steps { flex-direction: column; }
+      .flow-arrow { transform: rotate(90deg); }
+
+      .arch-comparison { grid-template-columns: 1fr; }
+
+      .cta-steps { flex-direction: column; align-items: center; gap: 1rem; }
+
+      .footer-content { flex-direction: column; gap: 0.75rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="container">
+      <a href="https://commit.no">
+        <img src="https://cdn.sanity.io/images/uomw3y04/production/e6678d7d814ad3bc89d71e67cb44bb47664802af-1099x201.svg" alt="Commit" class="nav-logo">
+      </a>
+      <ul class="nav-links">
+        <li><a href="#leveranser">Leveranser</a></li>
+        <li><a href="#arkitektur">Arkitektur</a></li>
+        <li><a href="#demo">Demo</a></li>
+        <li><a href="#kontakt" class="cta-btn">Kom i gang</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        GDPR-compliant AI
+      </div>
+      <h1>Claude Code med<br><span>EU data residency</span></h1>
+      <p>Gi utviklerteamet ditt tilgang til verdens beste AI-kodeverktøy — uten å kompromisse på personvern. All data forblir i EU.</p>
+      <div class="hero-buttons">
+        <a href="#kontakt" class="btn-primary">Book onboarding →</a>
+        <a href="#arkitektur" class="btn-secondary">Se hvordan det fungerer</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <span class="label">Utfordringen</span>
+        <h2>AI-verktøy uten kontroll er en risiko</h2>
+        <p>De fleste AI-kodeverktøy sender data til servere utenfor EU. Det skaper problemer for virksomheter som behandler personopplysninger.</p>
+      </div>
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="icon icon-red">🔒</div>
+          <h3>Data residency</h3>
+          <p>GDPR krever kontroll over hvor personopplysninger behandles. Via AWS Bedrock rutes all trafikk gjennom Frankfurt, Stockholm og Paris — ingen data forlater EU.</p>
+        </div>
+        <div class="why-card">
+          <div class="icon icon-blue">🛡️</div>
+          <h3>Compliance-dokumentasjon</h3>
+          <p>Datatilsynet forventer at dere kan dokumentere vurderinger og tiltak. Vi leverer ferdige maler for DPIA, databehandleroversikt og brukerretningslinjer.</p>
+        </div>
+        <div class="why-card">
+          <div class="icon icon-green">⚡</div>
+          <h3>Operasjonell kontroll</h3>
+          <p>Vårt compliance-plugin gir PII-skanning i sanntid, tier-switching mellom EU og Global, og audit-logging — direkte i utviklerens arbeidsflyt.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deliverables -->
+  <section class="section-dark" id="leveranser">
+    <div class="container">
+      <div class="section-header">
+        <span class="label">Hva du får</span>
+        <h2>Alt du trenger for å ta i bruk Claude Code trygt</h2>
+        <p>Fra teknisk oppsett til compliance-dokumentasjon — vi leverer en komplett pakke tilpasset ditt team.</p>
+      </div>
+      <div class="deliverables-grid">
+        <div class="deliverable-card">
+          <div class="deliverable-number">01</div>
+          <h3>AWS Bedrock-oppsett</h3>
+          <p>Vi konfigurerer kundens AWS-konto med Bedrock, EU-inferensprofiler, IAM-roller og budsjettalarmer.</p>
+        </div>
+        <div class="deliverable-card">
+          <div class="deliverable-number">02</div>
+          <h3>Claude Code-konfigurasjon</h3>
+          <p>Managed settings for hele teamet med EU-ruting, modellvalg og tilgangsstyring via IAM eller SSO.</p>
+        </div>
+        <div class="deliverable-card">
+          <div class="deliverable-number">03</div>
+          <h3>Commit Compliance Plugin</h3>
+          <p>PII-skanning, tier-switching, audit-logging og dataklassifisering — integrert direkte i Claude Code.</p>
+        </div>
+        <div class="deliverable-card">
+          <div class="deliverable-number">04</div>
+          <h3>Compliance-dokumentasjon</h3>
+          <p>Fire ferdig utarbeidede dokumenter: vurderingsnotat, DPIA-mal, underdatabehandler-oversikt og brukerretningslinjer.</p>
+        </div>
+        <div class="deliverable-card">
+          <div class="deliverable-number">05</div>
+          <h3>Onboarding-workshop</h3>
+          <p>Praktisk workshop for utviklerteamet: Bedrock-oppsett, plugin-installasjon, tier-bruk og beste praksis.</p>
+        </div>
+        <div class="deliverable-card">
+          <div class="deliverable-number">06</div>
+          <h3>Pilotperiode med support</h3>
+          <p>To ukers dedikert support etter go-live, slik at teamet kommer trygt i gang.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture -->
+  <section class="section-white" id="arkitektur">
+    <div class="container">
+      <div class="section-header">
+        <span class="label">Teknisk arkitektur</span>
+        <h2>Full kontroll over dataflyt</h2>
+        <p>Claude Code kjører lokalt. Når EU-tier er aktivert, går all kommunikasjon med modellen gjennom AWS Bedrock i Europa.</p>
+      </div>
+
+      <!-- Flow diagram -->
+      <div class="arch-flow" style="margin-bottom: 2.5rem;">
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="flow-icon" style="background: var(--gray-100);">💻</div>
+            <span class="flow-step-label">Utvikler</span>
+            <span class="flow-step-sub">Lokal maskin</span>
+          </div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step">
+            <div class="flow-icon" style="background: rgba(239,68,68,0.08);">🔌</div>
+            <span class="flow-step-label">Compliance Plugin</span>
+            <span class="flow-step-sub">PII-skanning</span>
+          </div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step">
+            <div class="flow-icon" style="background: rgba(59,130,246,0.08);">☁️</div>
+            <span class="flow-step-label">AWS Bedrock</span>
+            <span class="flow-step-sub">EU-regioner</span>
+          </div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step">
+            <div class="flow-icon" style="background: rgba(34,197,94,0.08);">🤖</div>
+            <span class="flow-step-label">Claude</span>
+            <span class="flow-step-sub">EU-inferens</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tier comparison -->
+      <div class="arch-comparison">
+        <div class="arch-card highlighted">
+          <div class="arch-card-header">
+            <span class="arch-tag"><span style="width:6px;height:6px;border-radius:50%;background:#16a34a;display:inline-block;"></span> Anbefalt</span>
+            EU-tier
+          </div>
+          <div class="arch-card-body">
+            <div class="arch-row">
+              <span class="arch-label">Backend</span>
+              <span class="arch-value">AWS Bedrock</span>
+            </div>
+            <div class="arch-row">
+              <span class="arch-label">Regioner</span>
+              <span class="arch-value">Frankfurt, Stockholm, Paris</span>
+            </div>
+            <div class="arch-row">
+              <span class="arch-label">Modeller</span>
+              <span class="arch-value">Opus, Sonnet, Haiku</span>
+            </div>
+            <div class="arch-row">
+              <span class="arch-label">Auth</span>
+              <span class="arch-value">AWS IAM / SSO</span>
+            </div>
+            <div class="arch-row">
+              <span class="arch-label">Data i EU</span>
+              <span class="arch-value"><span class="arch-tag">✓ Garantert</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="arch-card">
+          <div class="arch-card-header">
+            Global-tier
+          </div>
+          <div class="arch-card-body">
+            <div class="arch-row">
+              <span class="arch-label">Backend</span>
+              <span class="arch-value">Anthropic API</span>
+            </div>
+            <div class="arch-row">
+              <span class="arch-label">Regioner</span>
+              <span class="arch-value">Global (primært US)</span>
+            </div>
+            <div class="arch-row">
+              <span class="arch-label">Modeller</span>
+              <span class="arch-value">Opus, Sonnet, Haiku</span>
+            </div>
+            <div class="arch-row">
+              <span class="arch-label">Auth</span>
+              <span class="arch-value">Anthropic Max</span>
+            </div>
+            <div class="arch-row">
+              <span class="arch-label">Data i EU</span>
+              <span class="arch-value" style="color: var(--gray-400);">Ikke garantert</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Plugin Demo -->
+  <section class="section-dark" id="demo">
+    <div class="container">
+      <div class="section-header">
+        <span class="label">Se det i praksis</span>
+        <h2>Pluginet i aksjon</h2>
+        <p>Commit Compliance-pluginet gir utviklerne full kontroll over data residency og fanger opp personopplysninger automatisk.</p>
+      </div>
+
+      <div class="demo-grid">
+        <!-- EU tier -->
+        <div class="demo-item">
+          <img src="screenshot-eu-tier.png" alt="Tier byttet til EU — statuslinje og hooks aktiveres for EU-kontekst" class="demo-screenshot">
+          <div class="demo-text">
+            <div class="step-label">Tier-switching</div>
+            <h3>Bytt til EU-tier med én kommando</h3>
+            <p>Når utvikleren kjører <code style="background:rgba(255,255,255,0.08);padding:0.15rem 0.4rem;border-radius:0.25rem;font-size:0.85em;">/commit-compliance:tier eu</code> aktiveres EU-ruting umiddelbart.</p>
+            <ul class="highlight-list">
+              <li>Statuslinjen bekrefter aktiv tier</li>
+              <li>PII-skanneren tilpasser kontekst for EU</li>
+              <li>All API-trafikk rutes via AWS Bedrock i Europa</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Global tier -->
+        <div class="demo-item reverse">
+          <img src="screenshot-global-tier.png" alt="Tier byttet til Global — advarsel om at data kan prosesseres utenfor EU" class="demo-screenshot">
+          <div class="demo-text">
+            <div class="step-label">Advarsler</div>
+            <h3>Tydelige varsler ved Global-tier</h3>
+            <p>Bytter utvikleren til Global-tier, vises umiddelbart en advarsel om at data kan prosesseres utenfor EU — med påminnelse om å ikke bruke personopplysninger.</p>
+            <ul class="highlight-list">
+              <li>Rød statuslinje signaliserer Global-modus</li>
+              <li>Advarsel: «Data kan prosesseres utenfor EU»</li>
+              <li>Påminnelse om å unngå sensitive opplysninger</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- PII scanner -->
+        <div class="demo-item-full">
+          <div class="demo-text" style="text-align:center; max-width:700px;">
+            <div class="step-label" style="justify-content:center;">PII-skanner</div>
+            <h3>Automatisk blokkering av personopplysninger</h3>
+            <p>PII-skanneren overvåker alt som skrives til fil. Oppdager den bankkontonummer, e-postadresser eller telefonnummer, blokkeres skrivingen automatisk og utvikleren får velge hvordan situasjonen håndteres.</p>
+          </div>
+          <img src="screenshot-pii-scanner.png" alt="PII-skanneren blokkerer filskriving — personopplysninger oppdaget i kundedata" class="demo-screenshot demo-screenshot-large">
+          <div class="demo-text" style="max-width:700px;">
+            <ul class="highlight-list" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0.25rem 2rem;">
+              <li>Bankkontonummer oppdaget (10 forekomster)</li>
+              <li>E-postadresser flagget (10 forekomster)</li>
+              <li>Mobilnummer identifisert (10 forekomster)</li>
+              <li>Utvikleren velger: skriv likevel eller bruk fiktive data</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Compliance docs -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <span class="label">Dokumentasjon</span>
+        <h2>Fire dokumenter klar til bruk</h2>
+        <p>Tekniske seksjoner er ferdig utfylt. Kunden fyller inn juridiske vurderinger og organisasjonsspesifikke felter. Bør kvalitetssikres av kundens personvernombud.</p>
+      </div>
+      <div class="docs-grid">
+        <div class="doc-card">
+          <span class="doc-number">1</span>
+          <div class="doc-icon">📋</div>
+          <h3>Vurderingsnotat</h3>
+          <p>Teknisk beskrivelse av dataflyt, EU-garantier og tiltak. Kan vises til Datatilsynet eller brukes som grunnlag for intern juridisk vurdering.</p>
+        </div>
+        <div class="doc-card">
+          <span class="doc-number">2</span>
+          <div class="doc-icon">📊</div>
+          <h3>DPIA-mal</h3>
+          <p>Vurdering av personvernkonsekvenser etter GDPR art. 35. Tekniske seksjoner er ferdig utfylt — kunden legger til formål og rettslig grunnlag.</p>
+        </div>
+        <div class="doc-card">
+          <span class="doc-number">3</span>
+          <div class="doc-icon">🔗</div>
+          <h3>Underdatabehandler-oversikt</h3>
+          <p>Dokumenterer behandlingskjeden fra kunde via AWS til Anthropic, med avtaleverk og overføringsmekanismer.</p>
+        </div>
+        <div class="doc-card">
+          <span class="doc-number">4</span>
+          <div class="doc-icon">📖</div>
+          <h3>Brukerretningslinjer</h3>
+          <p>Praktisk veiledning i hverdagsspråk: hva er lov å sende til AI, hva gjør du ved PII-advarsel, og huskeliste for teamet.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <section class="section-dark">
+    <div class="container">
+      <div class="section-header">
+        <span class="label">Implementering</span>
+        <h2>Fra kickoff til produksjon på 3–4 uker</h2>
+        <p>En strukturert prosess som sikrer at alt er på plass — teknisk og juridisk — før teamet tar verktøyet i bruk.</p>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot">1</div>
+          <div class="timeline-content">
+            <h3>Kickoff og behovsavklaring</h3>
+            <p>Vi kartlegger teamstørrelse, modellbehov, eksisterende infrastruktur og integrasjonskrav.</p>
+            <div class="timeline-meta"><span>1 dag</span> <span>Commit + kunde</span></div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">2</div>
+          <div class="timeline-content">
+            <h3>AWS Bedrock-oppsett og IAM</h3>
+            <p>Konfigurering av Bedrock med EU-inferensprofiler, IAM-roller, budsjettalarmer og tilgangskontroll.</p>
+            <div class="timeline-meta"><span>2–3 dager</span> <span>Commit</span></div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">3</div>
+          <div class="timeline-content">
+            <h3>Claude Code og plugin-konfigurasjon</h3>
+            <p>Installasjon av managed settings, compliance-plugin og verifisering av EU-ruting for hele teamet.</p>
+            <div class="timeline-meta"><span>1–2 dager</span> <span>Commit</span></div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">4</div>
+          <div class="timeline-content">
+            <h3>Compliance-dokumentasjon</h3>
+            <p>Utarbeidelse av de fire dokumentene i samarbeid med kundens juridiske ressurser.</p>
+            <div class="timeline-meta"><span>3–5 dager</span> <span>Commit + jurist</span></div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">5</div>
+          <div class="timeline-content">
+            <h3>Onboarding-workshop</h3>
+            <p>Praktisk opplæring for utviklerteamet: oppsett, tier-bruk, PII-varsler og beste praksis.</p>
+            <div class="timeline-meta"><span>½ dag</span> <span>Commit</span></div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">6</div>
+          <div class="timeline-content">
+            <h3>Pilotperiode</h3>
+            <p>Teamet bruker verktøyet med dedikert support fra Commit. Justeringer gjøres underveis.</p>
+            <div class="timeline-meta"><span>2 uker</span> <span>Commit + kunde</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="cta-section" id="kontakt">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Ta kontakt</h2>
+        <p>Vi hjelper deg med oppsett, compliance-dokumentasjon og onboarding av teamet. Fyll ut skjemaet, så tar vi kontakt innen en virkedag.</p>
+        <form class="contact-form" id="contactForm">
+          <div class="form-row">
+            <label>
+              Navn
+              <input type="text" name="name" placeholder="Ditt navn" required>
+            </label>
+            <label>
+              Bedrift
+              <input type="text" name="company" placeholder="Bedriftsnavn" required>
+            </label>
+          </div>
+          <label>
+            E-post
+            <input type="email" name="email" placeholder="din@epost.no" required>
+          </label>
+          <label>
+            Melding
+            <textarea name="message" placeholder="Fortell oss litt om behovet deres..."></textarea>
+          </label>
+          <button type="submit" class="btn-primary">Send henvendelse</button>
+        </form>
+        <div class="form-success" id="formSuccess">
+          Takk for din henvendelse! Vi tar kontakt snart.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var form = this;
+      var data = new FormData(form);
+      var subject = encodeURIComponent('Henvendelse fra ' + data.get('name') + ' (' + data.get('company') + ')');
+      var body = encodeURIComponent('Navn: ' + data.get('name') + '\nBedrift: ' + data.get('company') + '\nE-post: ' + data.get('email') + '\n\nMelding:\n' + data.get('message'));
+      window.location.href = 'mailto:ai@commit.no?subject=' + subject + '&body=' + body;
+      form.style.display = 'none';
+      document.getElementById('formSuccess').classList.add('visible');
+    });
+  </script>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <img src="https://cdn.sanity.io/images/uomw3y04/production/e6678d7d814ad3bc89d71e67cb44bb47664802af-1099x201.svg" alt="Commit" class="footer-logo">
+        <span>Commit AS · Org.nr. 934 427 688 · commit.no</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
