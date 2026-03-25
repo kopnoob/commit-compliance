@@ -742,81 +742,13 @@
       border-radius: 2rem;
     }
 
-    /* ── Contact Form ── */
-    .contact-form {
-      max-width: 480px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .contact-form .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-
-    .contact-form label {
-      display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: rgba(255,255,255,0.6);
-      letter-spacing: 0.03em;
-    }
-
-    .contact-form input,
-    .contact-form textarea {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 0.5rem;
-      padding: 0.75rem 1rem;
-      font-size: 0.9rem;
-      font-family: inherit;
+    /* ── Contact Email ── */
+    .contact-email {
+      font-size: 1.5rem;
+      font-weight: 700;
       color: var(--white);
-      transition: border-color 0.2s, background 0.2s;
-    }
-
-    .contact-form input::placeholder,
-    .contact-form textarea::placeholder {
-      color: rgba(255,255,255,0.25);
-    }
-
-    .contact-form input:focus,
-    .contact-form textarea:focus {
-      outline: none;
-      border-color: var(--accent);
-      background: rgba(255,255,255,0.08);
-    }
-
-    .contact-form textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    .contact-form .btn-primary {
-      align-self: flex-start;
-      font-family: inherit;
-    }
-
-    .form-success {
-      display: none;
-      text-align: center;
-      color: rgba(255,255,255,0.8);
-      font-size: 1rem;
-      padding: 2rem 0;
-    }
-
-    .form-success.visible {
-      display: block;
-    }
-
-    @media (max-width: 640px) {
-      .contact-form .form-row {
-        grid-template-columns: 1fr;
-      }
+      letter-spacing: -0.02em;
+      margin-top: 0.5rem;
     }
 
     /* ── CTA ── */
@@ -1293,48 +1225,12 @@
   <section class="cta-section" id="kontakt">
     <div class="container">
       <div class="cta-content">
-        <h2>Ta kontakt</h2>
-        <p>Vi hjelper deg med oppsett, compliance-dokumentasjon og onboarding av teamet. Fyll ut skjemaet, så tar vi kontakt innen en virkedag.</p>
-        <form class="contact-form" id="contactForm">
-          <div class="form-row">
-            <label>
-              Navn
-              <input type="text" name="name" placeholder="Ditt navn" required>
-            </label>
-            <label>
-              Bedrift
-              <input type="text" name="company" placeholder="Bedriftsnavn" required>
-            </label>
-          </div>
-          <label>
-            E-post
-            <input type="email" name="email" placeholder="din@epost.no" required>
-          </label>
-          <label>
-            Melding
-            <textarea name="message" placeholder="Fortell oss litt om behovet deres..."></textarea>
-          </label>
-          <button type="submit" class="btn-primary">Send henvendelse</button>
-        </form>
-        <div class="form-success" id="formSuccess">
-          Takk for din henvendelse! Vi tar kontakt snart.
-        </div>
+        <h2>Interessert?</h2>
+        <p>Vi hjelper deg med oppsett, compliance-dokumentasjon og onboarding av teamet. Ta kontakt, så avtaler vi en uforpliktende prat.</p>
+        <p class="contact-email">kopstad@commit.no</p>
       </div>
     </div>
   </section>
-
-  <script>
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      var form = this;
-      var data = new FormData(form);
-      var subject = encodeURIComponent('Henvendelse fra ' + data.get('name') + ' (' + data.get('company') + ')');
-      var body = encodeURIComponent('Navn: ' + data.get('name') + '\nBedrift: ' + data.get('company') + '\nE-post: ' + data.get('email') + '\n\nMelding:\n' + data.get('message'));
-      window.location.href = 'mailto:ai@commit.no?subject=' + subject + '&body=' + body;
-      form.style.display = 'none';
-      document.getElementById('formSuccess').classList.add('visible');
-    });
-  </script>
 
   <!-- Footer -->
   <footer>
